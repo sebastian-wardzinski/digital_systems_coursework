@@ -1,0 +1,91 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dE:/Lab3/lab3part3
+varithmetic_logic_unit
+Z1 !s110 1538364889
+!i10b 1
+!s100 bS4>Ozh`oD>W`16XdG[C@2
+I5AQC;dJcXAA@KX:fQYBc:3
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+R0
+Z3 w1538364886
+Z4 8ALU.v
+Z5 FALU.v
+L0 3
+Z6 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z7 !s108 1538364889.000000
+Z8 !s107 ALU.v|
+Z9 !s90 -reportprogress|300|ALU.v|
+!i113 1
+Z10 tCvgOpt 0
+vbit4_ripple_carry_adder
+R1
+!i10b 1
+!s100 ZlkK6=j[oo4]7GW3]7IVH0
+ITUl2mA=DE;zT:UNN;9`?73
+R2
+R0
+R3
+R4
+R5
+L0 58
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+vfull_adder
+R1
+!i10b 1
+!s100 @]EGc_4IIN1WPf0b1cj4X1
+INSj<f^0lL6<7]2`REW2F=0
+R2
+R0
+R3
+R4
+R5
+L0 73
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+vHEX_DISPLAY
+R1
+!i10b 1
+!s100 =oEHL:MiE5=PInMR^ZoQJ0
+I<XH`ceBPEXzYNT1X[T2hM0
+R2
+R0
+R3
+R4
+R5
+L0 84
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+n@h@e@x_@d@i@s@p@l@a@y

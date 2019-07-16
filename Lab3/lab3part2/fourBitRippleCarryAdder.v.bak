@@ -1,0 +1,28 @@
+
+
+module bit4_ripple_carry_adder(SW, LEDR);
+	
+	input [8:0]SW; 	// [3:0] is bitstream a, [7:4] is bitstream b, [8] is Cin
+	output [3:0]LEDR; // bitstream of the sum lit up (or down) 
+	output [9:9]LEDR; 	// Cout, aka. the most significant bit of the sum bitstream
+	
+	wire c1, c2, c3; 	// to connect the adder modules
+	
+	full_adder a1(SW[0], SW[4], SW[8], LEDR[0], c1);
+	full_adder a2(SW[1], SW[5], c1, LEDR[1], c2);
+	full_adder a3(SW[2], SW[6], c2, LEDR[2], c3);
+	full_adder a4(SW[3], SW[7], c3, LEDR[3], LEDR[9]);
+
+endmodule
+
+
+
+module  full_adder(a, b, cin, s, cout);
+
+	input a, b, cin;
+	output s, cout;
+
+	assign s = (cin^a^b) | (cin&a&b);			//s is 1 if only one or if all the inputs are 1
+	assign cout = (b&a) | (cin&b) | (cin&a);	//the three cases where you need to carry over
+	
+endmodule 

@@ -1,0 +1,91 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dE:/Lab4/lab4part2
+varithmetic_logic_unitv2
+Z1 !s110 1539745683
+!i10b 1
+!s100 zTGN7g;KD7PCkB^U@OGU70
+I8G4@o4BPVA:N`o6[cQ[^D2
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+R0
+Z3 w1539745578
+Z4 8ALUregister.v
+Z5 FALUregister.v
+L0 1
+Z6 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z7 !s108 1539745683.000000
+Z8 !s107 ALUregister.v|
+Z9 !s90 -reportprogress|300|ALUregister.v|
+!i113 1
+Z10 tCvgOpt 0
+vbit4_ripple_carry_adder
+R1
+!i10b 1
+!s100 :UD[Vo@HNVeOZA4Xc<RC[2
+I30BO>K^Xz0:i>MjB^oQ<O0
+R2
+R0
+R3
+R4
+R5
+L0 63
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+vfull_adder
+R1
+!i10b 1
+!s100 h^MTQ_LfVOEJ9[Z=lPQDZ3
+IfYHP4ZQXS6ZJnD9dm[Vnf1
+R2
+R0
+R3
+R4
+R5
+L0 78
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+vHEX_DISPLAY
+R1
+!i10b 1
+!s100 jh61hd@1<MofjKE4D`7Zl1
+IhlQM]847@;:LEf^oP=:Yo1
+R2
+R0
+R3
+R4
+R5
+L0 89
+R6
+r1
+!s85 0
+31
+R7
+R8
+R9
+!i113 1
+R10
+n@h@e@x_@d@i@s@p@l@a@y

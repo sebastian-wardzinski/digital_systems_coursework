@@ -1,0 +1,99 @@
+
+
+module arithmetic_logic_unit(SW, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR);
+	input [7:0]SW; 	// encompases A and B bitstream inputs
+	input [2:0]KEY;	// function inputs
+	
+	output [7:0]LEDR; // one of the ways ALUout will be displayed
+	output[6:0]HEX0, HEX1, HEX2, HEX3, HEX4 ,HEX5; 	// HEX0 displays value of B, HEX2 displays value of A, HEX4 display ALUout[3:0], HEX5 displays ALUout[7:4]
+	
+	assign HEX1 = 7'b0000000; //both these hexes will be set to zero, I think it would be clearer if they were set to 1 (Off) but the lab has such constrictions
+	assign HEX3 = 7'b0000000;
+
+	wire [2:0]Function = KEY;
+	
+	wire [3:0]A = SW[7:4];
+	wire [3:0]B = SW[3:0];
+
+	reg [7:0]ALUout;
+	
+	//bit4_ripple_carry_adder adder(SW, LEDR[4:0]);	
+	
+	assign LEDR = ALUout;	// to make sure the LEDs are always representing the ALUout values
+
+	always@(*) begin 
+		
+		case(Function)	// start case statement
+			
+			//3'b000: adder(SW, LEDR[4:0]); 							// A+B using the adder from Part II of this lab, couldn't manage to get the module working inside the always block
+			
+			3'b001:	ALUout = A + B;									// A+B using the Verilog '+' operator
+			
+			3'b010:	ALUout = {~A | ~B, (~A & ~B) | (A ^ B)};	// A NAND B in the lower four bits of ALUout and A NOR B in the upper four bits
+			
+			3'b011:	if (A || B) ALUout = 8'b11000000; 			// Ouput 8'b11000000 if at least 1 of the 8 bits in the two inputs is 1 (use a single OR operation)
+			
+			3'b100:	if ( ( (A[0]&A[1]) ^ (A[0]&A[2]) ^ (A[0]&A[3]) ^ (A[1]&A[2]) ^ (A[1]&A[3]) ^ (A[2]&A[3]) ) && ( (B[0]&B[1]&B[2]) ^ (B[0]&B[1]&B[3]) ^ (B[0]&B[2]&B[3]) ^ (B[1]&B[2]&B[3]) )) ALUout = 8'b00111111; 	// Output 8'b00111111 if exactly 2 bits of the A switches are 1, and exactly 3 bits of the B switches are 1 ( (A[0]&(A[1]^A[2]^A[3])) ^ (A[1]&(A[2]^A[3])) ^ (A[2]&A[3]) )
+	
+			3'b101:	ALUout = {B, ~A};									// Display the B switches in the most significant four bits of ALUout and the complement of the A switches in the least-significant four bits without complementing the bits individually
+			
+			3'b110:	ALUout = {A ^ B, A ~^ B};						// A XNOR B in the lower four bits and A XOR B in the upper four bits
+			
+			default: ALUout = 8'b00000000;							// Sets the whole ALUout bitstream to zeros if none of the casees are triggered, eg.if function = 3'b111
+		
+		endcase
+
+	end
+	
+	HEX_DISPLAY h0(HEX0, B);					//using the hex display modules to display the hexadecimal values of the inputs and outputs
+	HEX_DISPLAY h2(HEX2, A);
+	HEX_DISPLAY h4(HEX4, ALUout[3:0]);
+	HEX_DISPLAY h5(HEX5, ALUout[7:4]);
+			
+endmodule 
+
+
+
+
+module bit4_ripple_carry_adder(SW, LEDR);
+	
+	input [7:0]SW; 	// [3:0] is bitstream B, [7:4] is bitstream A
+	output [4:0]LEDR; // bitstream of the sum lit up (or down), LEDR[4] is for Cout, aka. the most significant bit of the sum bitstream
+	
+	wire c1, c2, c3; 	// to connect the adder modules
+	
+	full_adder a0(SW[0], SW[4], c1, LEDR[0], c1);
+	full_adder a1(SW[1], SW[5], c1, LEDR[1], c2);
+	full_adder a2(SW[2], SW[6], c2, LEDR[2], c3);
+	full_adder a3(SW[3], SW[7], c3, LEDR[3], LEDR[4]);
+
+endmodule
+
+
+module  full_adder(a, b, cin, s, cout);
+
+	input a, b, cin;
+	output s, cout;
+
+	assign s = (cin^a^b) | (cin&a&b);			//s is 1 if only one or if all the inputs are 1
+	assign cout = (b&a) | (cin&b) | (cin&a);	//the three cases where you need to carry over
+	
+endmodule 
+
+
+module HEX_DISPLAY(HEX0, SW);	//directly uses keywords to utilize the switches and the HEX display on the FGBA board to avoid assigning other variables
+
+	input [3:0]SW;
+	output [6:0]HEX0;
+	
+	//checks which combinations require of each HEX display segment (0-6) to light up; this allows you to use 7 equations
+	//an alternative is creating 16 cases in which you would explictly define [6:0]HEX0
+	assign HEX0[0] = (~SW[3]&~SW[2]&~SW[1]&SW[0])|(~SW[3]&SW[2]&~SW[1]&~SW[0])|(SW[3]&~SW[2]&SW[1]&SW[0])|(SW[3]&SW[2]&~SW[1]&~SW[0])|(SW[3]&SW[2]&~SW[1]&SW[0]);
+	assign HEX0[1] = (~SW[3]&SW[2]&~SW[1]&SW[0])|(~SW[3]&SW[2]&SW[1]&~SW[0])|(SW[3]&~SW[2]&SW[1]&SW[0])|(SW[3]&SW[2]&~SW[1]&~SW[0])|(SW[3]&SW[2]&SW[1]&SW[0]);
+	assign HEX0[2] = (~SW[3]&~SW[2]&SW[1]&~SW[0])|(SW[3]&SW[2]&~SW[1]&~SW[0])|(SW[3]&SW[2]&SW[1]&~SW[0])|(SW[3]&SW[2]&SW[1]&SW[0]);
+	assign HEX0[3] = (~SW[3]&~SW[2]&~SW[1]&SW[0])|(~SW[3]&SW[2]&~SW[1]&~SW[0])|(~SW[3]&SW[2]&SW[1]&SW[0])|(SW[3]&~SW[2]&~SW[1]&SW[0])|(SW[3]&~SW[2]&SW[1]&~SW[0])|(SW[3]&SW[2]&SW[1]&SW[0]);
+	assign HEX0[4] = (~SW[3]&~SW[2]&~SW[1]&SW[0])|(~SW[3]&~SW[2]&SW[1]&SW[0])|(~SW[3]&SW[2]&~SW[1]&~SW[0])|(~SW[3]&SW[2]&~SW[1]&SW[0])|(~SW[3]&SW[2]&SW[1]&SW[0])|(SW[3]&~SW[2]&~SW[1]&SW[0]);
+	assign HEX0[5] = (~SW[3]&~SW[2]&~SW[1]&SW[0])|(~SW[3]&~SW[2]&SW[1]&~SW[0])|(~SW[3]&~SW[2]&SW[1]&SW[0])|(~SW[3]&SW[2]&SW[1]&SW[0])|(SW[3]&SW[2]&~SW[1]&~SW[0])|(SW[3]&SW[2]&~SW[1]&SW[0]);
+	assign HEX0[6] = (~SW[3]&~SW[2]&~SW[1]&~SW[0])|(~SW[3]&~SW[2]&~SW[1]&SW[0])|(~SW[3]&SW[2]&SW[1]&SW[0]);
+	
+endmodule

@@ -1,0 +1,33 @@
+module bit_8_RotatingRegister(SW,KEY,LEDR);
+	input [9:0]SW;
+	input [3:0]KEY;
+	output [7:0]LEDR;
+	
+	wire Reset = SW[9];
+	
+	wire Clock = KEY[0];
+	wire Loadn = KEY[1];
+	wire rotateR = KEY[2];
+	wire Wrapn = KEY[3];
+	
+	wire [7:0]D = SW[7:0];
+	reg [7:0]Q = 0;	
+	reg [7:0]regis;			//Q[7] is the leftmost bit, Q[0] is the rightmost bit
+	reg temp = 0;
+	assign LEDR = regis;
+	
+	
+	always @(posedge Clock) begin// triggered every time clock rises
+		if(!Loadn) Q = D;
+		else if (rotateR && Wrapn) Q = Q >> 1;															//shift right and 0 pad
+		else if (!rotateR && Wrapn) Q = Q << 1;															//shift left and 0 pad
+		else if (rotateR && !Wrapn) begin temp = Q[0]; Q = Q >> 1; Q[7] = temp; end	//shift right and wrap
+		else if (!rotateR && !Wrapn) begin temp = Q[7]; Q = Q << 1; Q[0] = temp; end	//shift left and wrap
+		regis = Q;
+	end
+	
+endmodule
+	
+	
+	
+	
